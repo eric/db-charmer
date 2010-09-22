@@ -24,6 +24,13 @@ module DbCharmer
       @@connection_classes[connection_name] ||= establish_connection_to_db(connection_name, config)
     end
 
+    # Removes a connection from the cache
+    def self.disconnect(connection_name)
+      if conn = @@connection_classes.delete(connection_name)
+        conn.disconnect!
+      end
+    end
+
     # Establish connection with a specified name
     def self.establish_connection(connection_name, should_exist = true)
       abstract_class = generate_abstract_class(connection_name, should_exist)
